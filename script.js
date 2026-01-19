@@ -1,4 +1,4 @@
-// --- 1. RESTORED CLASSIC HEART SHAPE ---
+// --- 1. SOLID 3D HEART ---
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -11,22 +11,22 @@ const heartData = new Float32Array(count * 3);
 const starData = new Float32Array(count * 3);  
 
 for (let i = 0; i < count; i++) {
-    // Restoring the "Beginning" Heart Shape math
     const t = Math.random() * Math.PI * 2;
-    const r = Math.random() * 0.2 + 0.8; // Keeps it hollow/concentrated on edges
+    // Solid Heart Logic: Randomize 'r' from 0 to 1 to fill the inside
+    const r = Math.random(); 
     
     let x = 16 * Math.pow(Math.sin(t), 3);
     let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    let z = (Math.random() - 0.5) * 8; 
+    let z = (Math.random() - 0.5) * 10; 
 
     heartData[i*3] = x * r;
     heartData[i*3+1] = y * r;
-    heartData[i*3+2] = z;
+    heartData[i*3+2] = z * r;
 
-    // Splattered Starfield (Romantic Colors)
-    starData[i*3] = (Math.random() - 0.5) * 180;
-    starData[i*3+1] = (Math.random() - 0.5) * 120;
-    starData[i*3+2] = (Math.random() - 0.5) * 60;
+    // Splatter Target
+    starData[i*3] = (Math.random() - 0.5) * 200;
+    starData[i*3+1] = (Math.random() - 0.5) * 150;
+    starData[i*3+2] = (Math.random() - 0.5) * 100;
 
     positions[i*3] = heartData[i*3];
     positions[i*3+1] = heartData[i*3+1];
@@ -45,7 +45,7 @@ for(let i=0; i<count; i++) {
 }
 geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-const mat = new THREE.PointsMaterial({ size: 0.32, vertexColors: true, transparent: true, opacity: 0.85 });
+const mat = new THREE.PointsMaterial({ size: 0.35, vertexColors: true, transparent: true, opacity: 0.9 });
 const points = new THREE.Points(geo, mat);
 scene.add(points);
 camera.position.z = 50;
@@ -61,59 +61,60 @@ function animate() {
         const ty = exploded ? starData[i3+1] : heartData[i3+1];
         const tz = exploded ? starData[i3+2] : heartData[i3+2];
 
-        pos[i3] += (tx - pos[i3]) * 0.08;
-        pos[i3+1] += (ty - pos[i3+1]) * 0.08;
-        pos[i3+2] += (tz - pos[i3+2]) * 0.08;
+        pos[i3] += (tx - pos[i3]) * 0.1; // Faster transition
+        pos[i3+1] += (ty - pos[i3+1]) * 0.1;
+        pos[i3+2] += (tz - pos[i3+2]) * 0.1;
     }
     geo.attributes.position.needsUpdate = true;
-    points.rotation.y += 0.004;
+    points.rotation.y += 0.005;
     renderer.render(scene, camera);
 }
 animate();
 
-// --- 2. ACCURATE DISTANCE-BASED DETECTION ---
-function updateDisplay(fingers) {
-    const letter = document.getElementById('anniversary-letter');
-    const frame = document.getElementById('frame');
-    const photos = document.querySelectorAll('.gallery-photo');
+// --- 2. HAND SIGN RULES ---
+const letter = document.getElementById('anniversary-letter');
+const frame = document.getElementById('frame');
+const photos = document.querySelectorAll('.gallery-photo');
 
-    exploded = false;
+function updateContent(f) {
+    // Hide everything by default
     letter.style.display = 'none';
     frame.style.display = 'none';
+    photos.forEach(p => p.classList.remove('active'));
+    exploded = false;
 
-    if (fingers === 0) {
-        exploded = false; 
+    if (f === 0) {
+        // FIST: Show Letter, Heart Shape
         letter.style.display = 'block';
-    } else if (fingers >= 1 && fingers <= 5) {
-        exploded = true; 
+        exploded = false;
+    } else if (f >= 1 && f <= 5) {
+        // 1-5: Show Photo, Splatter Stars
+        exploded = true;
         frame.style.display = 'flex';
-        photos.forEach((p, i) => p.classList.toggle('active', i === (fingers - 1)));
+        const targetPhoto = document.getElementById(`photo${f}`);
+        if (targetPhoto) targetPhoto.classList.add('active');
     }
 }
 
+// MediaPipe Hands
 const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
-hands.setOptions({maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.7});
+hands.setOptions({maxNumHands: 1, modelComplexity: 1, minDetectionConfidence: 0.75});
 
 hands.onResults((res) => {
     if (res.multiHandLandmarks && res.multiHandLandmarks.length > 0) {
         const lm = res.multiHandLandmarks[0];
-        const getDist = (p1, p2) => Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-
         let f = 0;
-        const wrist = lm[0];
-        // Tips: 8, 12, 16, 20. Joints: 6, 10, 14, 18.
-        const tips = [8, 12, 16, 20];
-        const bases = [6, 10, 14, 18];
-        
-        for (let i = 0; i < 4; i++) {
-            if (getDist(lm[tips[i]], wrist) > getDist(lm[bases[i]], wrist)) f++;
-        }
-        // Improved Thumb Logic
-        if (getDist(lm[4], lm[17]) > getDist(lm[2], lm[17]) * 1.3) f++;
-        
-        updateDisplay(f);
+        // Basic finger counting (Tip higher than PIP joint)
+        if (lm[8].y < lm[6].y) f++; 
+        if (lm[12].y < lm[10].y) f++; 
+        if (lm[16].y < lm[14].y) f++; 
+        if (lm[20].y < lm[18].y) f++;
+        // Thumb check (horizontal distance from index base)
+        if (Math.abs(lm[4].x - lm[5].x) > 0.08) f++; 
+
+        updateContent(f);
     } else {
-        updateDisplay(-1);
+        updateContent(-1); // No hand = just the heart
     }
 });
 
