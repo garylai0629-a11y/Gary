@@ -1,54 +1,26 @@
-body {
-    margin: 0;
-    background-color: #020005;
-    color: #f3e5f5;
-    font-family: "Microsoft JhengHei", sans-serif;
-    overflow: hidden;
-}
-
-#canvas-container {
+.ui-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
-}
-
-.ui-overlay {
-    position: absolute;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
     pointer-events: none;
 }
 
-.letter-box {
-    background: rgba(20, 0, 40, 0.9);
-    padding: 35px;
-    border-radius: 20px;
-    border: 2px solid #bf77ff;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    opacity: 0;
-    transition: opacity 1s ease;
-    box-shadow: 0 0 30px #8a2be2, inset 0 0 15px #8a2be2;
-    pointer-events: auto;
-}
-
-.letter-box.active { opacity: 1; }
-
 .photo-frame {
-    width: 400px;
-    height: 550px;
-    border: 3px solid #ffffff;
-    border-radius: 10px;
-    display: none;
+    width: 380px;  /* Adjust size as needed */
+    height: 520px;
+    border: 5px solid #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 50px #8a2be2, 0 0 20px #ffffff;
+    display: none; /* Controlled by JS */
     position: relative;
-    box-shadow: 0 0 40px #ffffff, 0 0 80px #8a2be2;
     background: #000;
+    pointer-events: auto;
 }
 
 .gallery-photo {
@@ -57,7 +29,9 @@ body {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.5s ease-in-out;
 }
 
-.gallery-photo.active { opacity: 1; }
+.gallery-photo.active {
+    opacity: 1;
+}
