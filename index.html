@@ -1,38 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our 1000 Days ❤️</title>
     <link rel="stylesheet" href="style.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
+    <div id="canvas-container"></div>
 
-    <canvas id="fireworksCanvas"></canvas>
+    <div class="ui-overlay">
+        <div id="anniversary-letter" class="letter-box">
+            <p style="white-space: pre-line; text-align: left; line-height: 1.8;">
+                給我最愛的小廢廢:
 
-    <div class="container">
-        <div id="stars-container"></div>
+                今天是我們在一起的第1000天。
+                
+                寫下這行字的時候，我突然意識到，原來「一千天」不是一個冷冰冰的數字，而是由無數個日常、笑聲、擁抱、爭吵、和彼此選擇對方的瞬間拼湊而成。謝謝你出現在我的生命裡。
 
-        <div class="photo-frame">
-            <div id="anniversary-message" class="active">
-                <h1>Happy 1000 Days Anniversary ❤️</h1>
-                <p>Hold up 1 to 5 fingers to see our memories</p>
-            </div>
+                謝謝你在我開心時陪我笑，在我低落時願意聽我說那些不成熟的煩惱；謝謝你包容我的缺點，也相信我能成為更好的人。和你在一起的日子，讓我明白什麼叫做安心，不是每天都完美，但每天都值得。
 
-            <img id="photo1" class="gallery-photo" src="photo1.jpeg" alt="Memory 1">
-            <img id="photo2" class="gallery-photo" src="photo2.jpeg" alt="Memory 2">
-            <img id="photo3" class="gallery-photo" src="photo3.jpeg" alt="Memory 3">
-            <img id="photo4" class="gallery-photo" src="photo4.jpeg" alt="Memory 4">
-            <img id="photo5" class="gallery-photo" src="photo5.jpeg" alt="Memory 5">
+                這一千天裡，我們有過很多不容易的時候。但我很慶幸的是，無論開心或困難，我們都沒有放開彼此的手。你讓我學會愛不是轟煥烈烈，而是願意留下、願意理解、願意一次又一次選擇同一個人。
+
+                未來還有很多天，也許不會每一天都順利，但我希望那些日子裡，依然有你。一起吃很多頓飯、看很多次夕陽、分享瑣碎的小事，也在重要的時刻彼此陪伴。如果可以，我想把「我們」繼續寫成一個很長很長的故事。
+
+                第一千天快樂! 謝謝你，成為我的女朋友，也成為我想一直珍惜的人。
+
+                愛你的大廢廢
+            </p>
+        </div>
+
+        <div class="photo-frame" id="frame">
+            <img id="photo1" class="gallery-photo" src="photo1.jpeg">
+            <img id="photo2" class="gallery-photo" src="photo2.jpeg">
+            <img id="photo3" class="gallery-photo" src="photo3.jpeg">
+            <img id="photo4" class="gallery-photo" src="photo4.jpeg">
+            <img id="photo5" class="gallery-photo" src="photo5.jpeg">
         </div>
     </div>
 
     <video id="input_video" style="display:none;"></video>
-
     <script src="script.js"></script>
 </body>
-
 </html>
