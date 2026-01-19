@@ -1,3 +1,18 @@
+body {
+    margin: 0;
+    background-color: #0a0505; /* Deep warm black */
+    color: #fff;
+    font-family: "Microsoft JhengHei", sans-serif;
+    overflow: hidden;
+}
+
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Stars in back */
+}
+
 .ui-overlay {
     position: fixed;
     top: 0;
@@ -11,16 +26,29 @@
     pointer-events: none;
 }
 
-.photo-frame {
-    width: 380px;  /* Adjust size as needed */
-    height: 520px;
-    border: 5px solid #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 0 50px #8a2be2, 0 0 20px #ffffff;
+.letter-box, .photo-frame {
+    position: absolute; /* Both stay in the center */
     display: none; /* Controlled by JS */
-    position: relative;
-    background: #000;
     pointer-events: auto;
+}
+
+.letter-box {
+    background: rgba(40, 10, 10, 0.85); /* Warm tint */
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #ffb6c1; /* Light pink */
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 30px #ff69b4;
+}
+
+.photo-frame {
+    width: 380px;
+    height: 520px;
+    border: 6px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 50px #ff1493, 0 0 20px #fff;
 }
 
 .gallery-photo {
@@ -28,10 +56,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    display: none;
 }
 
-.gallery-photo.active {
-    opacity: 1;
-}
+.gallery-photo.active { display: block; }
