@@ -1,23 +1,28 @@
-/* Ensure the letter box is centered and hidden initially */
-.letter-box {
-    display: none; /* JS will change this to 'block' only on 0 */
-    background: rgba(15, 5, 5, 0.9);
-    padding: 40px;
-    border-radius: 20px;
-    border: 2px solid #ffb6c1;
-    max-width: 600px;
-    box-shadow: 0 0 30px #ff69b4;
-    text-align: center;
-    z-index: 20;
-}
-
-/* Centering the photo frame */
-.photo-frame {
-    display: none; 
+.ui-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
     justify-content: center;
     align-items: center;
-    width: 400px;
-    height: 550px;
-    border: 4px solid white;
-    box-shadow: 0 0 40px pink;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.letter-box, .photo-frame {
+    pointer-events: auto;
+    /* This ensures they are centered within the flex container */
+}
+
+.photo-frame {
+    width: 380px;
+    height: 520px;
+    display: none; /* Controlled by JS flex */
+    justify-content: center;
+    align-items: center;
+    border: 5px solid white;
+    background: black;
+    box-shadow: 0 0 40px #ff69b4;
 }
