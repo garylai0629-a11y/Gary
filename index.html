@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our 1000 Days ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <canvas id="fireworksCanvas"></canvas>
+
+    <div class="container">
+        <div id="stars-container"></div>
+
+        <div class="photo-frame">
+            <div id="anniversary-message" class="active">
+                <h1>Happy 1000 Days Anniversary ❤️</h1>
+                <p>Hold up 1 to 5 fingers to see our memories</p>
+            </div>
+
+            <img id="photo1" class="gallery-photo" src="photo1.jpg" alt="Memory 1">
+            <img id="photo2" class="gallery-photo" src="photo2.jpg" alt="Memory 2">
+            <img id="photo3" class="gallery-photo" src="photo3.jpg" alt="Memory 3">
+            <img id="photo4" class="gallery-photo" src="photo4.jpg" alt="Memory 4">
+            <img id="photo5" class="gallery-photo" src="photo5.jpg" alt="Memory 5">
+        </div>
+    </div>
+
+    <video id="input_video" style="display:none;"></video>
+
+    <script src="script.js"></script>
+</body>
+</html>
