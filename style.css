@@ -1,70 +1,63 @@
 body {
     margin: 0;
-    background-color: #020205; /* Deep space black */
-    color: #e0b0ff; /* Lighter purple for text */
+    background-color: #020005;
+    color: #f3e5f5;
     font-family: "Microsoft JhengHei", sans-serif;
     overflow: hidden;
 }
 
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.ui-overlay {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
 .letter-box {
-    background: rgba(15, 0, 30, 0.85); /* Dark purple tint */
-    padding: 30px;
+    background: rgba(20, 0, 40, 0.9);
+    padding: 35px;
     border-radius: 20px;
-    border: 1px solid #9370db; /* Medium purple border */
+    border: 2px solid #bf77ff;
     max-width: 600px;
     max-height: 80vh;
     overflow-y: auto;
     opacity: 0;
-    transition: opacity 1s;
-    box-shadow: 0 0 40px rgba(147, 112, 219, 0.4);
+    transition: opacity 1s ease;
+    box-shadow: 0 0 30px #8a2be2, inset 0 0 15px #8a2be2;
+    pointer-events: auto;
 }
 
+.letter-box.active { opacity: 1; }
+
 .photo-frame {
-    width: 420px;
-    height: 560px;
-    border: 4px solid #ba55d3; /* Orchid purple */
-    border-radius: 15px;
+    width: 400px;
+    height: 550px;
+    border: 3px solid #ffffff;
+    border-radius: 10px;
     display: none;
     position: relative;
-    box-shadow: 0 0 60px rgba(186, 85, 211, 0.6);
-    background: black;
-}
-/* Add this to your existing style.css or replace the sections */
-
-.letter-box {
-    background: rgba(10, 0, 20, 0.9);
-    padding: 40px;
-    border-radius: 25px;
-    border: 2px solid #a020f0; 
-    max-width: 650px;
-    max-height: 80vh;
-    overflow-y: auto;
-    opacity: 0;
-    transition: all 1s ease-in-out;
-    /* Purple Glow */
-    box-shadow: 0 0 20px #a020f0, inset 0 0 10px #a020f0;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-}
-
-.letter-box.active {
-    opacity: 1;
-}
-
-.photo-frame {
-    width: 420px;
-    height: 560px;
-    border: 4px solid #d8bfd8;
-    border-radius: 15px;
-    display: none; 
-    position: relative;
-    /* Frame Glow */
-    box-shadow: 0 0 30px #a020f0;
+    box-shadow: 0 0 40px #ffffff, 0 0 80px #8a2be2;
     background: #000;
 }
 
-/* Make the text inside the letter pop */
-.letter-box p {
-    color: #f3e5f5;
-    font-size: 1.1rem;
-    line-height: 1.8;
+.gallery-photo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
+
+.gallery-photo.active { opacity: 1; }
