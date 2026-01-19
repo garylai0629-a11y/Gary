@@ -1,28 +1,48 @@
 .ui-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    z-index: 100;
     pointer-events: none;
 }
 
-.letter-box, .photo-frame {
+/* The Letter Box */
+.letter-box {
+    display: none;
+    background: rgba(10, 0, 5, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #ffb6c1;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 30px #ff69b4;
     pointer-events: auto;
-    /* This ensures they are centered within the flex container */
 }
 
+/* The Photo Frame */
 .photo-frame {
-    width: 380px;
-    height: 520px;
-    display: none; /* Controlled by JS flex */
-    justify-content: center;
-    align-items: center;
+    display: none; /* Flex when active */
+    width: 350px;
+    height: 500px;
     border: 5px solid white;
-    background: black;
-    box-shadow: 0 0 40px #ff69b4;
+    background: #000;
+    box-shadow: 0 0 40px #ff1493;
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-photo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This prevents the "weird big" look */
+    display: none;
+}
+
+.gallery-photo.active {
+    display: block;
 }
