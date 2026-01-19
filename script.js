@@ -1,61 +1,67 @@
-// --- 1. THREE.JS 3D HEART SETUP ---
+// --- 1. THREE.JS 3D PURPLE HEART ---
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
 document.getElementById('canvas-container').appendChild(renderer.domElement);
 
 const particlesGeometry = new THREE.BufferGeometry();
-const count = 70000; // 70k particles
+const count = 30000; // Optimized for performance
 const positions = new Float32Array(count * 3);
 const colors = new Float32Array(count * 3);
 
 for (let i = 0; i < count; i++) {
+    // Better 3D Heart Math
     const t = Math.random() * Math.PI * 2;
-    // Mathematical Heart Shape
+    const phi = Math.random() * Math.PI;
+    
+    // Heart Shape Logic
+    const r = Math.random();
     let x = 16 * Math.pow(Math.sin(t), 3);
     let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    let z = (Math.random() - 0.5) * 8; 
+    let z = (Math.random() - 0.5) * 10;
 
-    const spread = Math.random() * 1.5;
-    positions[i * 3] = x * spread;
-    positions[i * 3 + 1] = y * spread;
-    positions[i * 3 + 2] = z * spread;
+    // Apply random distribution inside the heart
+    positions[i * 3] = x * r;
+    positions[i * 3 + 1] = y * r;
+    positions[i * 3 + 2] = z * r;
 
-    colors[i * 3] = 1; // Rose Red
-    colors[i * 3 + 1] = 0.7 + Math.random() * 0.3; // Gold/Pink tint
-    colors[i * 3 + 2] = 0.8;
+    // Purple Gradient (Varying from light violet to deep indigo)
+    colors[i * 3] = 0.5 + Math.random() * 0.3; // R: 0.5 - 0.8
+    colors[i * 3 + 1] = 0.1 + Math.random() * 0.2; // G: Low for purple
+    colors[i * 3 + 2] = 0.8 + Math.random() * 0.2; // B: 0.8 - 1.0
 }
 
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
 const particlesMaterial = new THREE.PointsMaterial({
-    size: 0.08,
+    size: 0.12,
     vertexColors: true,
     transparent: true,
-    opacity: 0.6
+    opacity: 0.7,
+    blending: THREE.AdditiveBlending // Makes the purple glow
 });
 
 const heartPoints = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(heartPoints);
-camera.position.z = 45;
+camera.position.z = 40;
 
 function animate3D() {
     requestAnimationFrame(animate3D);
-    heartPoints.rotation.y += 0.003; 
+    heartPoints.rotation.y += 0.004; // Slow rotation
+    heartPoints.rotation.x += 0.001; 
     renderer.render(scene, camera);
 }
 animate3D();
 
-// --- 2. UI CONTROL LOGIC ---
+// --- 2. HAND TRACKING LOGIC (STABILIZED) ---
 const letter = document.getElementById('anniversary-letter');
 const frame = document.getElementById('frame');
 const photos = document.querySelectorAll('.gallery-photo');
+const videoElement = document.getElementById('input_video');
 
 function updateUI(fingerCount) {
-    // Hide all first
     letter.classList.remove('active');
     frame.style.display = 'none';
     photos.forEach(p => p.classList.remove('active'));
@@ -68,9 +74,6 @@ function updateUI(fingerCount) {
         if (target) target.classList.add('active');
     }
 }
-
-// --- 3. MEDIAPIPE HAND TRACKING (STABILIZED) ---
-const videoElement = document.getElementById('input_video');
 
 const hands = new Hands({
     locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
@@ -88,35 +91,22 @@ hands.onResults((results) => {
         const landmarks = results.multiHandLandmarks[0];
         let count = 0;
 
-        // Correct finger counting logic
+        // Thumb Logic (Horizontal)
+        if (Math.abs(landmarks[4].x - landmarks[2].x) > Math.abs(landmarks[3].x - landmarks[2].x)) count++;
+        // 4 Fingers Logic (Vertical)
         const tips = [8, 12, 16, 20];
         const joints = [6, 10, 14, 18];
-        
-        // 4 Fingers
         for (let i = 0; i < 4; i++) {
             if (landmarks[tips[i]].y < landmarks[joints[i]].y) count++;
         }
-        // Thumb (Horizontal check)
-        if (Math.abs(landmarks[4].x - landmarks[2].x) > Math.abs(landmarks[3].x - landmarks[2].x)) {
-            count++;
-        }
-
-        console.log("Hand detected! Fingers:", count); // Open Console (F12) to see this
         updateUI(count);
     } else {
-        updateUI(0); // Show letter if no hand is seen
+        updateUI(0);
     }
 });
 
 const cameraHandler = new Camera(videoElement, {
-    onFrame: async () => {
-        await hands.send({ image: videoElement });
-    },
-    width: 640,
-    height: 480
+    onFrame: async () => { await hands.send({ image: videoElement }); },
+    width: 640, height: 480
 });
-
-// Start the camera after a short delay to let the 3D heart load
-setTimeout(() => {
-    cameraHandler.start();
-}, 1000);
+cameraHandler.start();
