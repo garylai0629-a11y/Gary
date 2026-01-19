@@ -1,62 +1,23 @@
-body {
-    margin: 0;
-    background-color: #0a0505; /* Deep warm black */
-    color: #fff;
-    font-family: "Microsoft JhengHei", sans-serif;
-    overflow: hidden;
+/* Ensure the letter box is centered and hidden initially */
+.letter-box {
+    display: none; /* JS will change this to 'block' only on 0 */
+    background: rgba(15, 5, 5, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid #ffb6c1;
+    max-width: 600px;
+    box-shadow: 0 0 30px #ff69b4;
+    text-align: center;
+    z-index: 20;
 }
 
-#canvas-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1; /* Stars in back */
-}
-
-.ui-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
+/* Centering the photo frame */
+.photo-frame {
+    display: none; 
     justify-content: center;
     align-items: center;
-    z-index: 10;
-    pointer-events: none;
+    width: 400px;
+    height: 550px;
+    border: 4px solid white;
+    box-shadow: 0 0 40px pink;
 }
-
-.letter-box, .photo-frame {
-    position: absolute; /* Both stay in the center */
-    display: none; /* Controlled by JS */
-    pointer-events: auto;
-}
-
-.letter-box {
-    background: rgba(40, 10, 10, 0.85); /* Warm tint */
-    padding: 30px;
-    border-radius: 20px;
-    border: 2px solid #ffb6c1; /* Light pink */
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 0 30px #ff69b4;
-}
-
-.photo-frame {
-    width: 380px;
-    height: 520px;
-    border: 6px solid #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 50px #ff1493, 0 0 20px #fff;
-}
-
-.gallery-photo {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
-}
-
-.gallery-photo.active { display: block; }
